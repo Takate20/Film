@@ -34,7 +34,6 @@ class MainViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             mainUserRepository.getFilms().collect { films ->
-                Log.d("my log", films.toString())
                 _films.value = films
             }
         }
