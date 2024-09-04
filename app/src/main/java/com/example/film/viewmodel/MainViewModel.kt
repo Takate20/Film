@@ -35,6 +35,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             mainUserRepository.getFilms().collect { films ->
                 _films.value = films
+                Log.d("my log", state.toString())
             }
         }
     }
@@ -44,6 +45,7 @@ class MainViewModel @Inject constructor(
     ) { isLoading, films, errorMessage ->
         when (films) {
             is Resource.Success -> {
+                Log.d("my log", "Success")
                 FilmUiState(
                     films = films.data.map(NetworkFilm::toExternal),
                     isLoading = isLoading,
@@ -52,6 +54,7 @@ class MainViewModel @Inject constructor(
             }
 
             is Resource.Error -> {
+                Log.d("my log", "Error")
                 FilmUiState(
                     userMessage = films.errorMessage
                 )

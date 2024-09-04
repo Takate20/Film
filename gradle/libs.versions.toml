@@ -21,6 +21,7 @@ junitJupiter = "5.8.1"
 serialization = "1.6.2"
 navigationRuntimeKtx = "2.7.7"
 navigationCompose = "2.7.7"
+navigationHiltCompose = "1.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -61,6 +62,7 @@ serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization
 
 junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "navigationHiltCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

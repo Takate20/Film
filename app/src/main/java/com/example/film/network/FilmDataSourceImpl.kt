@@ -1,5 +1,6 @@
 package com.example.film.network
 
+import android.util.Log
 import com.example.film.data.remote.models.NetworkFilm
 import com.example.film.domain.api.FilmApi
 import com.example.film.util.Resource
@@ -10,11 +11,12 @@ import javax.inject.Inject
 class FilmDataSourceImpl @Inject constructor(
     private val randomUserApi: FilmApi
 ) : FilmDataSource {
-    
+
     override fun getFilms(): Flow<Resource<List<NetworkFilm>>> = flow {
         try {
-            if (randomUserApi.getFilms().isSuccessful) {
-                randomUserApi.getFilms().body()?.let { filmResult ->
+            val response = randomUserApi.getFilms()
+            if (response.isSuccessful) {
+                response.body()?.let { filmResult ->
                     emit(Resource.Success(data = filmResult.results))
                 }
             } else {

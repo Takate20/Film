@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MainFilmRepository @Inject constructor(
-    val randomUserDataSource: FilmDataSource
+    private val randomUserDataSource: FilmDataSource
 ): FilmRepository {
     override fun getFilms(): Flow<Resource<List<NetworkFilm>>> = randomUserDataSource.getFilms()
 }
