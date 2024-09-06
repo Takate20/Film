@@ -1,6 +1,7 @@
 package com.example.film.network
 
 import android.util.Log
+import com.example.film.BuildConfig
 import com.example.film.data.remote.models.NetworkFilm
 import com.example.film.domain.api.FilmApi
 import com.example.film.util.Resource
@@ -14,7 +15,7 @@ class FilmDataSourceImpl @Inject constructor(
 
     override fun getFilms(): Flow<Resource<List<NetworkFilm>>> = flow {
         try {
-            val response = randomUserApi.getFilms()
+            val response = randomUserApi.getFilms(BuildConfig.API_KEY)
             if (response.isSuccessful) {
                 response.body()?.let { filmResult ->
                     emit(Resource.Success(data = filmResult.results))

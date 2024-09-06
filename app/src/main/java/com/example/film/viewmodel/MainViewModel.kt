@@ -36,6 +36,18 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            combine(
+                mainUserRepository.getFilmsStream(),
+                mainUserRepository.getFavoriteFilmIdsStream()
+            ) { films, favoriteIds ->
+                _films.value = films
+                _favoritesIds.value = favoriteIds
+            }
+        }
+    }
+
+    init {
+        viewModelScope.launch {
             mainUserRepository.getFilmsStream().collect { films ->
                 _films.value = films
             }
@@ -45,12 +57,17 @@ class MainViewModel @Inject constructor(
         }
     }
 
+
     val state: StateFlow<FilmUiState> = combine(
         _isLoading, _films, _errorMessage, _favoritesIds
     ) { isLoading, films, errorMessage, favoritesIds ->
         when (films) {
             is Resource.Success -> {
-                val filmsResult = films.data.map { film -> film.toExternal(isFavorite = favoritesIds?.contains(film.id)) }
+                val filmsResult = films.data.map { film ->
+                    film.toExternal(
+                        isFavorite = favoritesIds?.contains(film.id)
+                    )
+                }
                 FilmUiState(
                     films = filmsResult,
                     isLoading = isLoading,

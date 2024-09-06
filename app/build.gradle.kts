@@ -14,6 +14,10 @@ val appConfigPropertiesFile = rootProject.file("appConfig.properties")
 val appConfig = Properties()
 appConfig.load(FileInputStream(appConfigPropertiesFile))
 
+val localPropertiesFile = rootProject.file("local.properties")
+val localProperties = Properties()
+localProperties.load(FileInputStream(localPropertiesFile))
+
 android {
     namespace = "com.example.film"
     compileSdk = 34
@@ -29,6 +33,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "API_KEY", localProperties["apiKey"].toString())
     }
 
     room {
