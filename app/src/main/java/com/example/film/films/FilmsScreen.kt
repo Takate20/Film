@@ -132,6 +132,14 @@ fun FilmsScreenPreview() {
                     overview = "some long overview",
                     voteAverage = 10.0,
                     isFavorite = false
+                ),
+                Film(
+                    id = 2,
+                    posterPath = "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
+                    title = "title",
+                    overview = "some long overview",
+                    voteAverage = 10.0,
+                    isFavorite = false
                 )
             )
         )
