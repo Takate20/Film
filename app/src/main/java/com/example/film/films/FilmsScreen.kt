@@ -98,7 +98,7 @@ fun FilmsScreen(
                                     Icon(
                                         imageVector = Icons.Rounded.Star,
                                         contentDescription = "star",
-                                        tint = if (film.isFavorite) Color.Blue else Color.White
+                                        tint = if (film.isFavorite) Color.Red else Color.Black
                                     )
                                 }
 
