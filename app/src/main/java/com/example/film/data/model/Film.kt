@@ -8,7 +8,6 @@ data class Film(
     val posterPath: String,
     val title: String,
     val overview: String,
-    val voteAverage: Double,
     val isFavorite: Boolean
 )
 
@@ -17,7 +16,6 @@ fun NetworkFilm.toExternal(isFavorite: Boolean?) = Film(
     posterPath = "https://image.tmdb.org/t/p/w500/$poster_path",
     title = title,
     overview = overview,
-    voteAverage = vote_average,
     isFavorite = isFavorite ?: false
 )
 
@@ -26,4 +24,12 @@ fun Film.toLocal() = LocalFilm(
     posterPath = posterPath,
     title = title,
     overview = overview
+)
+
+fun LocalFilm.toExternal() = Film(
+    id = id,
+    posterPath = posterPath,
+    title = title,
+    overview = overview,
+    isFavorite = true
 )

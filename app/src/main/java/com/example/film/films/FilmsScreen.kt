@@ -127,7 +127,6 @@ fun FilmsScreenPreview() {
                     posterPath = "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
                     title = "Borderlands",
                     overview = "some long overview",
-                    voteAverage = 10.0,
                     isFavorite = false
                 ),
                 Film(
@@ -135,7 +134,6 @@ fun FilmsScreenPreview() {
                     posterPath = "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
                     title = "Deadpool Wolverine",
                     overview = "some looooooooong overview",
-                    voteAverage = 10.0,
                     isFavorite = true
                 )
             )

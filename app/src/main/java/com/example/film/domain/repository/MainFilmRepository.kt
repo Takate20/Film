@@ -15,6 +15,10 @@ class MainFilmRepository @Inject constructor(
 ): FilmRepository {
     override fun getFilmsStream(): Flow<Resource<List<NetworkFilm>>> = filmDataSource.getFilms()
 
+    override fun getFavoritesStream(): Flow<List<LocalFilm>> {
+        return filmLocalSource.observeFavorites()
+    }
+
     override suspend fun toggleFilm(film: LocalFilm) {
         filmLocalSource.toggleFavorite(film)
     }

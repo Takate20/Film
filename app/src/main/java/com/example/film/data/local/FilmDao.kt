@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface FilmDao {
 
     @Query("SELECT * FROM film")
-    fun observeAll(): Flow<List<LocalFilm>>
+    fun observeFavorites(): Flow<List<LocalFilm>>
 
     @Query("SELECT * FROM film")
     suspend fun getAll(): List<LocalFilm>

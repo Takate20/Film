@@ -1,10 +1,9 @@
 package com.example.film.films
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.film.data.model.Film
@@ -36,20 +36,22 @@ fun FilmScreen(
                     .fillMaxWidth()
                     .padding(innerPadding),
             ) {
-                AsyncImage(
-                    model = film.posterPath,
-                    contentDescription = "user img",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(70.dp)
-                        .clip(CircleShape)
-                )
-                Text(
-                    text = film.title,
-                )
-                Text(
-                    text = film.voteAverage.toString(),
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    AsyncImage(
+                        model = film.posterPath,
+                        contentDescription = "user img",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(70.dp)
+                            .clip(CircleShape)
+                    )
+                    Text(
+                        text = film.title,
+                        modifier = Modifier.padding(start = 15.dp)
+                    )
+                }
             }
             Text(
                 text = film.overview,
@@ -58,4 +60,18 @@ fun FilmScreen(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun FilmScreenPreview() {
+    FilmScreen(
+        film = Film(
+            id = 1,
+            posterPath = "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
+            title = "Borderlands",
+            overview = "some long overview",
+            isFavorite = false
+        ),
+    )
 }

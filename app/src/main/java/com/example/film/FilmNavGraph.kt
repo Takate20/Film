@@ -10,9 +10,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.film.data.model.Film
-import com.example.film.films.Favorites
+import com.example.film.films.FavoritesScreen
 import com.example.film.films.FilmScreen
 import com.example.film.films.FilmsScreen
+import com.example.film.viewmodel.FavoritesViewModel
 import com.example.film.viewmodel.FilmViewModel
 import com.google.gson.Gson
 
@@ -40,7 +41,12 @@ fun FilmNavGraph(
             )
         }
         composable(FilmOuterDestinations.Favorites.route) {
-            Favorites()
+            val viewModel = hiltViewModel<FavoritesViewModel>()
+            val state = viewModel.favoritesUiState.collectAsStateWithLifecycle().value
+            FavoritesScreen(
+                favoritesUiState = state,
+                toggleFavorite = viewModel::toggleFavorite
+            )
         }
 
         composable(
