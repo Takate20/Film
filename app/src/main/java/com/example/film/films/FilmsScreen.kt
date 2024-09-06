@@ -14,9 +14,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -41,7 +46,7 @@ import com.example.film.viewmodel.MainViewModel
 @Composable
 fun FilmsScreen(
     viewModel: MainViewModel = hiltViewModel(),
-    onFilmClick: (Film) -> Unit = {},
+    onFilmClick: (Film) -> Unit,
 ) {
     val uiState = viewModel.state.collectAsStateWithLifecycle().value
     val state = rememberPullToRefreshState()
@@ -89,9 +94,14 @@ fun FilmsScreen(
                                 Text(
                                     text = film.title,
                                 )
-                                Text(
-                                    text = film.voteAverage.toString(),
-                                )
+                                IconButton(onClick = { viewModel.addToFavorites(film) }) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Star,
+                                        contentDescription = "star",
+                                        tint = if (film.isFavorite) Color.Blue else Color.White
+                                    )
+                                }
+
                             }
                             Text(
                                 text = film.overview,

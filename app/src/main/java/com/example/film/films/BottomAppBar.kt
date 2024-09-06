@@ -1,5 +1,6 @@
 package com.example.film.films
 
+import android.util.Log
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -37,6 +38,7 @@ fun BottomNavigationBar(navController: NavController) {
                 label = { Text(item.title) },
                 selected = selectedItem == index,
                 onClick = {
+                    Log.d("my log", currentRoute)
                     selectedItem = index
                     currentRoute = item.route
                     navController.navigate(item.route) {

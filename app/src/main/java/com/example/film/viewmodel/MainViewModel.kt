@@ -3,8 +3,10 @@ package com.example.film.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.film.data.local.LocalFilm
 import com.example.film.data.model.Film
 import com.example.film.data.model.toExternal
+import com.example.film.data.model.toLocal
 import com.example.film.data.remote.models.NetworkFilm
 import com.example.film.domain.FilmRepository
 import com.example.film.util.Resource
@@ -30,31 +32,33 @@ class MainViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     private val _errorMessage = MutableStateFlow(null)
     private val _films = MutableStateFlow<Resource<List<NetworkFilm>>>(Resource.Loading)
+    private val _favoritesIds = MutableStateFlow<List<Int>?>(null)
 
     init {
         viewModelScope.launch {
-            mainUserRepository.getFilms().collect { films ->
+            mainUserRepository.getFilmsStream().collect { films ->
                 _films.value = films
-                Log.d("my log", state.toString())
+            }
+            mainUserRepository.getFavoriteFilmIdsStream().collect { favoritesIds ->
+                _favoritesIds.value = favoritesIds
             }
         }
     }
 
     val state: StateFlow<FilmUiState> = combine(
-        _isLoading, _films, _errorMessage
-    ) { isLoading, films, errorMessage ->
+        _isLoading, _films, _errorMessage, _favoritesIds
+    ) { isLoading, films, errorMessage, favoritesIds ->
         when (films) {
             is Resource.Success -> {
-                Log.d("my log", "Success")
+                val filmsResult = films.data.map { film -> film.toExternal(isFavorite = favoritesIds?.contains(film.id)) }
                 FilmUiState(
-                    films = films.data.map(NetworkFilm::toExternal),
+                    films = filmsResult,
                     isLoading = isLoading,
                     userMessage = errorMessage
                 )
             }
 
             is Resource.Error -> {
-                Log.d("my log", "Error")
                 FilmUiState(
                     userMessage = films.errorMessage
                 )
@@ -75,10 +79,16 @@ class MainViewModel @Inject constructor(
     fun refresh() {
         _isLoading.value = true
         viewModelScope.launch {
-            mainUserRepository.getFilms().collect { film ->
+            mainUserRepository.getFilmsStream().collect { film ->
                 _films.value = film
             }
             _isLoading.value = false
+        }
+    }
+
+    fun addToFavorites(film: Film) {
+        viewModelScope.launch {
+            mainUserRepository.toggleFilm(film.toLocal())
         }
     }
 }

@@ -10,6 +10,7 @@ import com.example.film.di.component.ApplicationComponent
 import com.example.film.di.component.DaggerApplicationComponent
 import com.example.film.films.BottomNavigationBar
 import com.example.film.films.FilmsScreen
+import com.example.film.films.MainScreen
 import com.example.film.ui.theme.FilmTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             FilmTheme {
-                FilmNavGraph()
+                MainScreen()
             }
         }
     }

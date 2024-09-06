@@ -110,7 +110,7 @@ dependencies {
 
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
-    annotationProcessor(libs.room.compiler)
+    ksp(libs.room.compiler)
     implementation(libs.room.paging)
     implementation(libs.room.testing)
 
@@ -126,4 +126,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 }
