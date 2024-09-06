@@ -24,7 +24,7 @@ data class FilmUiState(
 )
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class FilmViewModel @Inject constructor(
     private val mainUserRepository: FilmRepository
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(false)

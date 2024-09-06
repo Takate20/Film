@@ -11,9 +11,10 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.film.FilmOuterDestinations
-
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
@@ -54,4 +55,10 @@ fun BottomNavigationBar(navController: NavController) {
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun BottomNavigationBarPreview() {
+    BottomNavigationBar(navController = rememberNavController())
 }
