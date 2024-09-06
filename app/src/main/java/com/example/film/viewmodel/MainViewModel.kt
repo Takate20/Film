@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.film.data.model.Film
 import com.example.film.data.model.toExternal
 import com.example.film.data.model.toLocal
-import com.example.film.data.remote.models.NetworkFilm
 import com.example.film.domain.FilmRepository
 import com.example.film.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,12 +39,12 @@ class MainViewModel @Inject constructor(
     private fun filmUiState(
         mainUserRepository: FilmRepository
     ): Flow<FilmUiState> {
-        val films = mainUserRepository.getFilmsStream()
+        val filmsStream = mainUserRepository.getFilmsStream()
 
-        val favoritesIds = mainUserRepository.getFavoriteFilmIdsStream()
+        val favoritesIdsStream = mainUserRepository.getFavoriteFilmIdsStream()
 
         return combine(
-            _isLoading, films, _errorMessage, favoritesIds
+            _isLoading, filmsStream, _errorMessage, favoritesIdsStream
         ) { isLoading, films, errorMessage, favoritesIds ->
             when (films) {
                 is Resource.Success -> {
@@ -75,7 +74,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun addToFavorites(film: Film) {
+    fun toggleFavorite(film: Film) {
         viewModelScope.launch {
             mainUserRepository.toggleFilm(film.toLocal())
         }
