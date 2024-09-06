@@ -19,7 +19,7 @@ class MainFilmRepository @Inject constructor(
         filmLocalSource.toggleFavorite(film)
     }
 
-    override suspend fun getFavoriteFilmIdsStream(): Flow<List<Int>> {
+    override fun getFavoriteFilmIdsStream(): Flow<List<Int>> {
         return filmLocalSource.observeExistingIds()
     }
 }

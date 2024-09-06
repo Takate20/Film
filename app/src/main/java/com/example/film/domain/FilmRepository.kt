@@ -10,7 +10,7 @@ interface FilmRepository {
     fun getFilmsStream(): Flow<Resource<List<NetworkFilm>>>
 
     suspend fun toggleFilm(film: LocalFilm)
-    suspend fun getFavoriteFilmIdsStream(): Flow<List<Int>>
+    fun getFavoriteFilmIdsStream(): Flow<List<Int>>
 //
 //    fun getFavoriteFilmIds(): List<Int>?
 }

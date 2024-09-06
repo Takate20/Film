@@ -1,9 +1,7 @@
 package com.example.film.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.film.data.local.LocalFilm
 import com.example.film.data.model.Film
 import com.example.film.data.model.toExternal
 import com.example.film.data.model.toLocal
@@ -11,6 +9,7 @@ import com.example.film.data.remote.models.NetworkFilm
 import com.example.film.domain.FilmRepository
 import com.example.film.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -31,75 +30,48 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     private val _errorMessage = MutableStateFlow(null)
-    private val _films = MutableStateFlow<Resource<List<NetworkFilm>>>(Resource.Loading)
-    private val _favoritesIds = MutableStateFlow<List<Int>?>(null)
 
-    init {
-        viewModelScope.launch {
-            combine(
-                mainUserRepository.getFilmsStream(),
-                mainUserRepository.getFavoriteFilmIdsStream()
-            ) { films, favoriteIds ->
-                _films.value = films
-                _favoritesIds.value = favoriteIds
-            }
-        }
-    }
+    val filmUiState: StateFlow<FilmUiState> = filmUiState(mainUserRepository).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = FilmUiState(isLoading = true)
+    )
 
-    init {
-        viewModelScope.launch {
-            mainUserRepository.getFilmsStream().collect { films ->
-                _films.value = films
-            }
-            mainUserRepository.getFavoriteFilmIdsStream().collect { favoritesIds ->
-                _favoritesIds.value = favoritesIds
-            }
-        }
-    }
+    private fun filmUiState(
+        mainUserRepository: FilmRepository
+    ): Flow<FilmUiState> {
+        val films = mainUserRepository.getFilmsStream()
 
+        val favoritesIds = mainUserRepository.getFavoriteFilmIdsStream()
 
-    val state: StateFlow<FilmUiState> = combine(
-        _isLoading, _films, _errorMessage, _favoritesIds
-    ) { isLoading, films, errorMessage, favoritesIds ->
-        when (films) {
-            is Resource.Success -> {
-                val filmsResult = films.data.map { film ->
-                    film.toExternal(
-                        isFavorite = favoritesIds?.contains(film.id)
+        return combine(
+            _isLoading, films, _errorMessage, favoritesIds
+        ) { isLoading, films, errorMessage, favoritesIds ->
+            when (films) {
+                is Resource.Success -> {
+                    val filmsResult = films.data.map { film ->
+                        film.toExternal(
+                            isFavorite = favoritesIds.contains(film.id)
+                        )
+                    }
+                    FilmUiState(
+                        films = filmsResult,
+                        isLoading = isLoading,
+                        userMessage = errorMessage
                     )
                 }
-                FilmUiState(
-                    films = filmsResult,
-                    isLoading = isLoading,
-                    userMessage = errorMessage
-                )
+
+                is Resource.Error -> {
+                    FilmUiState(
+                        userMessage = films.errorMessage
+                    )
+                }
+
+                Resource.Loading -> {
+                    FilmUiState(isLoading = true)
+                }
             }
 
-            is Resource.Error -> {
-                FilmUiState(
-                    userMessage = films.errorMessage
-                )
-            }
-
-            Resource.Loading -> {
-                FilmUiState(isLoading = true)
-            }
-        }
-
-    }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = FilmUiState(isLoading = true)
-        )
-
-    fun refresh() {
-        _isLoading.value = true
-        viewModelScope.launch {
-            mainUserRepository.getFilmsStream().collect { film ->
-                _films.value = film
-            }
-            _isLoading.value = false
         }
     }
 
