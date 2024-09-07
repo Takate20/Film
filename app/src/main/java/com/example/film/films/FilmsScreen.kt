@@ -3,6 +3,7 @@ package com.example.film.films
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -57,58 +58,67 @@ fun FilmsScreen(
                 .padding(innerPadding)
                 .fillMaxSize(),
         ) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(15.dp),
-                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
-            ) {
-                items(filmUiState.films) { film ->
-                    ElevatedCard(
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onFilmClick(film) }
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(20.dp)
+            if (filmUiState.films.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "No Films")
+                }
+            } else {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(15.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+                ) {
+                    items(filmUiState.films) { film ->
+                        ElevatedCard(
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onFilmClick(film) }
                         ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 10.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                            Column(
+                                modifier = Modifier.padding(20.dp)
                             ) {
-                                AsyncImage(
-                                    model = film.posterPath,
-                                    contentDescription = "user img",
-                                    contentScale = ContentScale.Crop,
+                                Row(
                                     modifier = Modifier
-                                        .fillMaxHeight()
-                                        .size(70.dp)
-                                        .clip(CircleShape)
-                                )
-                                Text(
-                                    text = film.title,
-                                )
-                                IconButton(onClick = { toggleFavorite(film) }) {
-                                    Icon(
-                                        imageVector = Icons.Rounded.Star,
-                                        contentDescription = "star",
-                                        tint = if (film.isFavorite) Color.Red else Color.Black
+                                        .fillMaxWidth()
+                                        .padding(bottom = 10.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    AsyncImage(
+                                        model = film.posterPath,
+                                        contentDescription = "user img",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .size(70.dp)
+                                            .clip(CircleShape)
                                     )
-                                }
+                                    Text(
+                                        text = film.title,
+                                    )
+                                    IconButton(onClick = { toggleFavorite(film) }) {
+                                        Icon(
+                                            imageVector = Icons.Rounded.Star,
+                                            contentDescription = "star",
+                                            tint = if (film.isFavorite) Color.Red else Color.Black
+                                        )
+                                    }
 
+                                }
+                                Text(
+                                    text = film.overview,
+                                    maxLines = 4,
+                                    overflow = TextOverflow.Ellipsis
+                                )
                             }
-                            Text(
-                                text = film.overview,
-                                maxLines = 4,
-                                overflow = TextOverflow.Ellipsis
-                            )
                         }
                     }
-                }
 
+                }
             }
         }
     }

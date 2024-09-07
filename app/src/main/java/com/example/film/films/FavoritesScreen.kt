@@ -3,6 +3,7 @@ package com.example.film.films
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -49,6 +50,7 @@ fun FavoritesScreen(
     val state = rememberPullToRefreshState()
 
     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+
         PullToRefreshBox(
             state = state,
             isRefreshing = false,
@@ -57,57 +59,65 @@ fun FavoritesScreen(
                 .padding(innerPadding)
                 .fillMaxSize(),
         ) {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(15.dp),
-                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
-            ) {
-                items(favoritesUiState.favorites) { favorite ->
-                    ElevatedCard(
-                        colors = CardDefaults.cardColors(containerColor = Color.White),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(20.dp)
+            if (favoritesUiState.favorites.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = "No Favorites")
+                }
+            } else {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(15.dp),
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+                ) {
+                    items(favoritesUiState.favorites) { favorite ->
+                        ElevatedCard(
+                            colors = CardDefaults.cardColors(containerColor = Color.White),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
                         ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 10.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
+                            Column(
+                                modifier = Modifier.padding(20.dp)
                             ) {
-                                AsyncImage(
-                                    model = favorite.posterPath,
-                                    contentDescription = "user img",
-                                    contentScale = ContentScale.Crop,
+                                Row(
                                     modifier = Modifier
-                                        .fillMaxHeight()
-                                        .size(70.dp)
-                                        .clip(CircleShape)
-                                )
-                                Text(
-                                    text = favorite.title,
-                                )
-                                IconButton(onClick = { toggleFavorite(favorite) }) {
-                                    Icon(
-                                        imageVector = Icons.Rounded.Star,
-                                        contentDescription = "star",
-                                        tint = if (favorite.isFavorite) Color.Red else Color.Black
+                                        .fillMaxWidth()
+                                        .padding(bottom = 10.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    AsyncImage(
+                                        model = favorite.posterPath,
+                                        contentDescription = "user img",
+                                        contentScale = ContentScale.Crop,
+                                        modifier = Modifier
+                                            .fillMaxHeight()
+                                            .size(70.dp)
+                                            .clip(CircleShape)
                                     )
-                                }
+                                    Text(
+                                        text = favorite.title,
+                                    )
+                                    IconButton(onClick = { toggleFavorite(favorite) }) {
+                                        Icon(
+                                            imageVector = Icons.Rounded.Star,
+                                            contentDescription = "star",
+                                            tint = if (favorite.isFavorite) Color.Red else Color.Black
+                                        )
+                                    }
 
+                                }
+                                Text(
+                                    text = favorite.overview,
+                                    maxLines = 4,
+                                    overflow = TextOverflow.Ellipsis
+                                )
                             }
-                            Text(
-                                text = favorite.overview,
-                                maxLines = 4,
-                                overflow = TextOverflow.Ellipsis
-                            )
                         }
                     }
                 }
-
             }
         }
     }
@@ -126,7 +136,7 @@ fun FavoritesScreenPreview() {
                     posterPath = "https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg",
                     title = "Borderlands",
                     overview = "some long overview",
-                    isFavorite = false
+                    isFavorite = true
                 ),
                 Film(
                     id = 2,
