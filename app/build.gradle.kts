@@ -118,7 +118,7 @@ dependencies {
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.paging)
-    implementation(libs.room.testing)
+
 
     implementation(libs.coli)
 
@@ -126,11 +126,22 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.junit.jupiter)
-    androidTestImplementation(libs.androidx.junit)
+    testImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.google.truth)
+    androidTestImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.room.testing)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.google.truth)
+    testImplementation(libs.androidx.espresso.core)
+
+
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 
 }

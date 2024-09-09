@@ -1,6 +1,5 @@
 package com.example.film.network
 
-import android.util.Log
 import com.example.film.BuildConfig
 import com.example.film.data.remote.models.NetworkFilm
 import com.example.film.domain.api.FilmApi

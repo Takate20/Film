@@ -2,6 +2,7 @@ package com.example.film.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
@@ -15,9 +16,6 @@ interface FilmDao {
     @Query("SELECT * FROM film")
     fun observeFavorites(): Flow<List<LocalFilm>>
 
-    @Query("SELECT * FROM film")
-    suspend fun getAll(): List<LocalFilm>
-
     @Query("SELECT * FROM film WHERE id = :filmId")
     suspend fun getById(filmId: Int): LocalFilm?
 
@@ -27,7 +25,7 @@ interface FilmDao {
     @Query("SELECT id FROM film")
     fun observeExistingIds(): Flow<List<Int>>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFilm(film: LocalFilm)
 
     @Transaction
