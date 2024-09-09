@@ -1,15 +1,18 @@
 package com.example.film.data.remote.models
 
+import com.google.gson.annotations.SerializedName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class NetworkFilm(
-    val genre_ids: List<Int>,
+//    @SerializedName("genre_ids")
+//    val genreIds: List<Int>,
     val id: Int,
-    val original_title: String,
+//    val original_title: String,
     val overview: String,
-    val poster_path: String,
+    @SerializedName("poster_path")
+    val posterPath: String,
     val title: String,
-    val vote_average: Double,
-    val vote_count: Int
+//    val vote_average: Double,
+//    val vote_count: Int
 )

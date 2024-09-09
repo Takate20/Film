@@ -6,8 +6,8 @@ import com.example.film.data.local.FilmDao
 import com.example.film.data.local.FilmDatabase
 import com.example.film.domain.FilmRepository
 import com.example.film.domain.repository.MainFilmRepository
-import com.example.film.network.FilmDataSource
-import com.example.film.network.FilmDataSourceImpl
+import com.example.film.data.remote.FilmDataSource
+import com.example.film.data.remote.FilmDataSourceImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

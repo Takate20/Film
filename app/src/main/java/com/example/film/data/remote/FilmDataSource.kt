@@ -1,4 +1,4 @@
-package com.example.film.network
+package com.example.film.data.remote
 
 import com.example.film.data.remote.models.NetworkFilm
 import com.example.film.util.Resource

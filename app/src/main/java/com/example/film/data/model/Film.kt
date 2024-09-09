@@ -13,7 +13,7 @@ data class Film(
 
 fun NetworkFilm.toExternal(isFavorite: Boolean?) = Film(
     id = id,
-    posterPath = "https://image.tmdb.org/t/p/w500/$poster_path",
+    posterPath = "https://image.tmdb.org/t/p/w500/$posterPath",
     title = title,
     overview = overview,
     isFavorite = isFavorite ?: false

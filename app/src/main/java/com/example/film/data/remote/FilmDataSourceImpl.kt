@@ -1,4 +1,4 @@
-package com.example.film.network
+package com.example.film.data.remote
 
 import com.example.film.BuildConfig
 import com.example.film.data.remote.models.NetworkFilm
@@ -23,6 +23,7 @@ class FilmDataSourceImpl @Inject constructor(
                 emit(Resource.Error("is not successful getting users"))
             }
         } catch (e: Exception) {
+            throw Exception(e)
             emit(Resource.Error(errorMessage = "error getting users"))
         }
     }
