@@ -23,7 +23,6 @@ class FilmDataSourceImpl @Inject constructor(
                 emit(Resource.Error("is not successful getting users"))
             }
         } catch (e: Exception) {
-            throw Exception(e)
             emit(Resource.Error(errorMessage = "error getting users"))
         }
     }

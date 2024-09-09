@@ -33,3 +33,15 @@ fun LocalFilm.toExternal() = Film(
     overview = overview,
     isFavorite = true
 )
+
+fun Film.toNetwork() = NetworkFilm(
+    id = id,
+    posterPath = posterPath,
+    title = title,
+    overview = overview
+)
+
+
+fun List<Film>.toNetwork() = map(Film::toNetwork)
+
+fun List<Film>.toLocal() = map(Film::toLocal)
