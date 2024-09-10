@@ -45,7 +45,11 @@ fun FilmNavGraph(
             val state = viewModel.favoritesUiState.collectAsStateWithLifecycle().value
             FavoritesScreen(
                 favoritesUiState = state,
-                toggleFavorite = viewModel::toggleFavorite
+                toggleFavorite = viewModel::toggleFavorite,
+                onFilmClick = { film ->
+                    val filmJson = Gson().toJson(film)
+                    navActions.navigateToFilmDetails(filmJson)
+                },
             )
         }
 

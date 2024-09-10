@@ -45,7 +45,8 @@ import com.example.film.viewmodel.FilmUiState
 @Composable
 fun FavoritesScreen(
     favoritesUiState: FavoritesUiState,
-    toggleFavorite: (Film) -> Unit
+    toggleFavorite: (Film) -> Unit,
+    onFilmClick: (Film) -> Unit,
 ) {
     val state = rememberPullToRefreshState()
 
@@ -76,7 +77,8 @@ fun FavoritesScreen(
                             colors = CardDefaults.cardColors(containerColor = Color.White),
                             elevation = CardDefaults.cardElevation(defaultElevation = 3.dp),
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillMaxWidth(),
+                            onClick = { onFilmClick(favorite) }
                         ) {
                             Column(
                                 modifier = Modifier.padding(20.dp)
