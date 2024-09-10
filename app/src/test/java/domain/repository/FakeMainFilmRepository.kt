@@ -12,41 +12,47 @@ import domain.data.remote.FakeFilmDataSource
 import domain.local.FakeFilmDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import org.junit.Before
 
 class FakeMainFilmRepository : FilmRepository {
 
-    private val film1 = Film(id = 1, overview = "ove", posterPath = "po", title = "ti", isFavorite = false)
-    private val film2 = Film(id = 2, overview = "ove", posterPath = "po", title = "ti", isFavorite = false)
-    private val film3 = Film(id = 3, overview = "ove", posterPath = "po", title = "ti", isFavorite = false)
-    private val remoteFilms = listOf(film1, film2, film3).toNetwork()
-    private val localFilms = listOf(film1).toLocal()
-    private lateinit var filmDataSource: FakeFilmDataSource
-    private lateinit var filmDao: FakeFilmDao
+    private var shouldThrowError = false
 
-    private lateinit var mainFilmRepository: FilmRepository
+    private val _films = MutableStateFlow(listOf<Film>())
 
-    @Before
-    fun createRepository() {
-        filmDataSource = FakeFilmDataSource(remoteFilms.toMutableList())
-        filmDao = FakeFilmDao(localFilms.toMutableList())
-        mainFilmRepository = MainFilmRepository(filmDataSource, filmDao)
+    fun setShouldThrowError(value: Boolean) {
+        shouldThrowError = value
     }
 
     override fun getFilmsStream(): Flow<Resource<List<NetworkFilm>>> = flow {
-
+        if (shouldThrowError) {
+            throw Exception("test error")
+        } else {
+            _films
+        }
     }
 
-    override fun getFavoritesStream(): Flow<List<LocalFilm>> {
-        TODO("Not yet implemented")
-    }
+    override fun getFavoritesStream(): Flow<List<LocalFilm>> =
+        _films.map { films -> films.filter { it.isFavorite }.map { it.toLocal() } }
 
     override suspend fun toggleFilm(film: LocalFilm) {
-        TODO("Not yet implemented")
+        _films.update { films ->
+            films.map { existingFilm ->
+                if (existingFilm.id == film.id) {
+                    existingFilm.copy(isFavorite = !existingFilm.isFavorite)
+                } else {
+                    existingFilm
+                }
+            }
+        }
     }
 
     override fun getFavoriteFilmIdsStream(): Flow<List<Int>> {
-        TODO("Not yet implemented")
+        return _films.map { films -> films.map { it.id } }
     }
 }

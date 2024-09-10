@@ -104,6 +104,7 @@ dependencies {
 
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
+    testImplementation(libs.junit.junit)
     ksp(libs.hilt.compiler)
 
     implementation(libs.compose.lifecyle)
